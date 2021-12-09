@@ -1,5 +1,4 @@
-# Dark Chess 暗棋
-
-一個用 c# 做出來的小遊戲
+# ChineseDarkChess 暗棋
+A really simple dark chess game develop with c#
 
 ![game preview](githubImage/gamePreview.png)
