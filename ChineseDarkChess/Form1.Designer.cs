@@ -24,6 +24,7 @@ namespace ChineseDarkChess {
         /// 這個方法的內容。
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.background = new System.Windows.Forms.PictureBox();
             this.player1ColorLabel = new System.Windows.Forms.Label();
             this.victoryLabel = new System.Windows.Forms.Label();
@@ -63,10 +64,11 @@ namespace ChineseDarkChess {
             this.victoryLabel.AutoSize = true;
             this.victoryLabel.Font = new System.Drawing.Font("新細明體", 20F);
             this.victoryLabel.ForeColor = System.Drawing.Color.White;
-            this.victoryLabel.Location = new System.Drawing.Point(541, 90);
+            this.victoryLabel.Location = new System.Drawing.Point(553, 92);
             this.victoryLabel.Name = "victoryLabel";
             this.victoryLabel.Size = new System.Drawing.Size(0, 34);
             this.victoryLabel.TabIndex = 3;
+            this.victoryLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // resetButton
             // 
@@ -124,8 +126,10 @@ namespace ChineseDarkChess {
             this.Controls.Add(this.victoryLabel);
             this.Controls.Add(this.player1ColorLabel);
             this.Controls.Add(this.background);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "暗棋";
             ((System.ComponentModel.ISupportInitialize)(this.background)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1Picture)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.player2Picture)).EndInit();

@@ -120,7 +120,6 @@ namespace ChineseDarkChess {
             bool hasMoved = false;
 
             if (!isPlayerMoveInCorrectTurn(clickedButtonPair)) {
-                Console.WriteLine("test");
                 return;
             }
 
