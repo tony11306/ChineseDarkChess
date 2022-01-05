@@ -32,6 +32,8 @@ namespace ChineseDarkChess {
             this.player2ColorLabel = new System.Windows.Forms.Label();
             this.player1Picture = new System.Windows.Forms.PictureBox();
             this.player2Picture = new System.Windows.Forms.PictureBox();
+            this.localPlayButton = new System.Windows.Forms.Button();
+            this.multiplayerButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.background)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1Picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player2Picture)).BeginInit();
@@ -81,7 +83,6 @@ namespace ChineseDarkChess {
             this.resetButton.TabIndex = 4;
             this.resetButton.Text = "再來一局";
             this.resetButton.UseVisualStyleBackColor = false;
-            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
             // 
             // player2ColorLabel
             // 
@@ -113,12 +114,36 @@ namespace ChineseDarkChess {
             this.player2Picture.TabIndex = 7;
             this.player2Picture.TabStop = false;
             // 
+            // localPlayButton
+            // 
+            this.localPlayButton.Font = new System.Drawing.Font("微軟正黑體", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.localPlayButton.Location = new System.Drawing.Point(502, 205);
+            this.localPlayButton.Name = "localPlayButton";
+            this.localPlayButton.Size = new System.Drawing.Size(199, 75);
+            this.localPlayButton.TabIndex = 8;
+            this.localPlayButton.Text = "Local mode";
+            this.localPlayButton.UseVisualStyleBackColor = true;
+            this.localPlayButton.Click += new System.EventHandler(this.localPlayButton_Click);
+            // 
+            // multiplayerButton
+            // 
+            this.multiplayerButton.Font = new System.Drawing.Font("微軟正黑體", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.multiplayerButton.Location = new System.Drawing.Point(502, 448);
+            this.multiplayerButton.Name = "multiplayerButton";
+            this.multiplayerButton.Size = new System.Drawing.Size(199, 75);
+            this.multiplayerButton.TabIndex = 9;
+            this.multiplayerButton.Text = "Online mode";
+            this.multiplayerButton.UseVisualStyleBackColor = true;
+            this.multiplayerButton.Click += new System.EventHandler(this.multiplayerButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(1182, 753);
+            this.Controls.Add(this.multiplayerButton);
+            this.Controls.Add(this.localPlayButton);
             this.Controls.Add(this.player2Picture);
             this.Controls.Add(this.player1Picture);
             this.Controls.Add(this.player2ColorLabel);
@@ -146,6 +171,8 @@ namespace ChineseDarkChess {
         private System.Windows.Forms.Label player2ColorLabel;
         private System.Windows.Forms.PictureBox player1Picture;
         private System.Windows.Forms.PictureBox player2Picture;
+        private System.Windows.Forms.Button localPlayButton;
+        private System.Windows.Forms.Button multiplayerButton;
     }
 }
 

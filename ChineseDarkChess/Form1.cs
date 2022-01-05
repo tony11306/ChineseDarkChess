@@ -9,169 +9,35 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ChineseDarkChess {
-    public partial class Form1 : Form {
+    public partial class Form1 : Form { // let Form1 be view
 
-        private const int BUTTON_START_POSITION_X = 20;
-        private const int BUTTON_START_POSITION_Y = 23;
-        private const int BUTTON_PADDING_X = 82;
-        private const int BUTTON_PADDING_Y = 89;
+        public const int BUTTON_START_POSITION_X = 20;
+        public const int BUTTON_START_POSITION_Y = 23;
+        public const int BUTTON_PADDING_X = 82;
+        public const int BUTTON_PADDING_Y = 89;
 
-        private const int RED_PIECE_TAKEN_START_POSTION_X = 90;
-        private const int RED_PIECE_TAKEN_START_POSTION_Y = 500;
-        private const int BLACK_PIECE_TAKEN_START_POSTION_X = 90;
-        private const int BLACK_PIECE_TAKEN_START_POSTION_Y = 550;
-        private const int PIECE_TAKEN_PADDING = 30;
+        public const int RED_PIECE_TAKEN_START_POSTION_X = 90;
+        public const int RED_PIECE_TAKEN_START_POSTION_Y = 500;
+        public const int BLACK_PIECE_TAKEN_START_POSTION_X = 90;
+        public const int BLACK_PIECE_TAKEN_START_POSTION_Y = 550;
+        public const int PIECE_TAKEN_PADDING = 30;
 
         private Button[,] pieceButtons = new Button[Rule.BOARD_WIDTH, Rule.BOARD_HEIGHT];
         private Button selectedButton = null;
         private Button attackButton = null;
-        private DarkChessModel darkChessModel;
         private List<PictureBox> redPiecesTakenPictures = new List<PictureBox>();
         private List<PictureBox> blackPiecesTakenPictures = new List<PictureBox>();
 
-        private bool isPlayer1Turn = true;
-        private bool isPlayer1Black = false;
-        private bool isGameStart = false;
+        private PlayModeInterface playMode;
 
         public Form1() {
             InitializeComponent();
-            initButtons();
-        }
-
-        private void initButtons() {
-
-            darkChessModel = new DarkChessModel();
-            isGameStart = false;
-            isPlayer1Turn = true;
-            selectedButton = null;
-            attackButton = null;
-
-            foreach (PictureBox pictureBox in redPiecesTakenPictures) {
-                Controls.Remove(pictureBox);
-                pictureBox.Dispose();
-            }
-
-            foreach (PictureBox pictureBox in blackPiecesTakenPictures) {
-                Controls.Remove(pictureBox);
-                pictureBox.Dispose();
-            }
-
-            redPiecesTakenPictures = new List<PictureBox>();
-            blackPiecesTakenPictures = new List<PictureBox>();
-
-            for (int i = 0; i < Rule.BOARD_WIDTH; ++i) {
-                for (int j = 0; j < Rule.BOARD_HEIGHT; ++j) {
-
-                    if (pieceButtons[i, j] != null) {
-                        Controls.Remove(pieceButtons[i, j]);
-                        pieceButtons[i, j].Dispose();
-                    }
-
-                    pieceButtons[i, j] = new Button();
-                    Controls.Add(pieceButtons[i, j]);
-                    pieceButtons[i, j].Size = new Size(65, 65);
-                    pieceButtons[i, j].BackgroundImage = Properties.Resources.unflip;
-                    pieceButtons[i, j].FlatStyle = FlatStyle.Flat;
-                    pieceButtons[i, j].TabStop = false;
-                    pieceButtons[i, j].Tag = new Pair<int, int>(i, j);
-                    pieceButtons[i, j].Click += buttonClick;
-                    pieceButtons[i, j].BackgroundImageLayout = ImageLayout.Stretch;
-                    pieceButtons[i, j].Location = new Point(i * BUTTON_PADDING_X + BUTTON_START_POSITION_X, j * BUTTON_PADDING_Y + BUTTON_START_POSITION_Y);
-                    pieceButtons[i, j].BringToFront();
-                    pieceButtons[i, j].Parent = background;
-                    pieceButtons[i, j].FlatAppearance.BorderSize = 0;
-
-                }
-            }
-        }
-
-        private bool isPlayerMoveInCorrectTurn(Pair<int, int> clickedButtonPair) {
-            int[,] board = darkChessModel.getBoard();
-            int x = clickedButtonPair.First;
-            int y = clickedButtonPair.Second;
-
-
-            if (board[x, y] == (int)PieceEnum.Unflip) {
-                return true;
-            }
-
-            if (!(selectedButton is null)) {
-                return true;
-            }
-
-            if (isPlayer1Turn) {
-                if (isPlayer1Black) {
-                    return board[x, y] > 0;
-                } else {
-                    return board[x, y] < 0;
-                }
-            } else {
-                if (isPlayer1Black) {
-                    return board[x, y] < 0;
-                } else {
-                    return board[x, y] > 0;
-                }
-            }
-        }
-
-        private void buttonClick(object sender, EventArgs e) {
-            Button clickedButton = (Button)sender;
-            Pair<int, int> clickedButtonPair = (Pair<int, int>)clickedButton.Tag;
-            bool hasMoved = false;
-
-            if (!isPlayerMoveInCorrectTurn(clickedButtonPair)) {
-                return;
-            }
-
-            if (!(selectedButton is null)) {
-                attackButton = clickedButton;
-                Pair<int, int> fromPos = (Pair<int, int>)selectedButton.Tag;
-                Pair<int, int> toPos = (Pair<int, int>)attackButton.Tag;
-                MoveData moveData = new MoveData(fromPos.First, fromPos.Second, toPos.First, toPos.Second);
-                hasMoved = darkChessModel.sumbitMove(moveData);
-                updateBoard(fromPos.First, fromPos.Second);
-                updateBoard(toPos.First, toPos.Second);
-                selectedButton.BackColor = Color.Transparent;
-                selectedButton = null;
-                attackButton = null;
-            } else if (darkChessModel.getBoard()[clickedButtonPair.First, clickedButtonPair.Second] == (int)PieceEnum.Unflip) {
-                Pair<int, int> p = (Pair<int, int>)clickedButton.Tag;
-                hasMoved = darkChessModel.flip(p.First, p.Second);
-                updateBoard(p.First, p.Second);
-            } else {
-                selectedButton = clickedButton;
-                selectedButton.BackColor = Color.Red;
-            }
-
-            if (!isGameStart) {
-                isGameStart = true;
-                isPlayer1Black = darkChessModel.getBoard()[clickedButtonPair.First, clickedButtonPair.Second] > 0;
-                player1Picture.BackgroundImage = isPlayer1Black ? getPieceImage((int)PieceEnum.BlackKing) : getPieceImage((int)PieceEnum.RedKing);
-                player2Picture.BackgroundImage = !isPlayer1Black ? getPieceImage((int)PieceEnum.BlackKing) : getPieceImage((int)PieceEnum.RedKing);
-            }
-
-            
-            if (hasMoved) {
-                isPlayer1Turn = !isPlayer1Turn;
-                if (isPlayer1Turn) {
-                    player1ColorLabel.BackColor = Color.RosyBrown;
-                    player2ColorLabel.BackColor = Color.Transparent;
-                } else {
-                    player1ColorLabel.BackColor = Color.Transparent;
-                    player2ColorLabel.BackColor = Color.RosyBrown;
-                }
-                updatePiecesTaken();
-            }
-
-            if (darkChessModel.isBlackWin()) {
-                victoryLabel.Text = "黑方獲勝";
-            } else if (darkChessModel.isRedWin()) {
-                victoryLabel.Text = "紅方獲勝";
-            }
+            hidePlayInformation();
+            showModeMenu();
 
         }
 
-        private Bitmap getPieceImage(int pieceID) {
+        public static Bitmap getPieceImage(int pieceID) {
             switch (pieceID) {
                 case (int)PieceEnum.BlackCannon:
                     return Properties.Resources.blackCannon;
@@ -210,9 +76,9 @@ namespace ChineseDarkChess {
             return null;
         }
 
-        private void updatePiecesTaken() {
-            while (blackPiecesTakenPictures.Count < darkChessModel.blackPiecesTaken.Count) {
-                Bitmap piecePicture = getPieceImage(darkChessModel.blackPiecesTaken[blackPiecesTakenPictures.Count]);
+        public void updatePiecesTaken(List<int> redPiecesTaken, List<int> blackPiecesTaken) {
+            while (blackPiecesTakenPictures.Count < blackPiecesTaken.Count) {
+                Bitmap piecePicture = getPieceImage(blackPiecesTaken[blackPiecesTakenPictures.Count]);
                 PictureBox newPicture = new PictureBox();
                 newPicture.BackgroundImage = piecePicture;
                 newPicture.Size = new Size(30, 30);
@@ -223,8 +89,8 @@ namespace ChineseDarkChess {
                 newPicture.BringToFront();
             }
 
-            while (redPiecesTakenPictures.Count < darkChessModel.redPiecesTaken.Count) {
-                Bitmap piecePicture = getPieceImage(darkChessModel.redPiecesTaken[redPiecesTakenPictures.Count]);
+            while (redPiecesTakenPictures.Count < redPiecesTaken.Count) {
+                Bitmap piecePicture = getPieceImage(redPiecesTaken[redPiecesTakenPictures.Count]);
                 PictureBox newPicture = new PictureBox();
                 newPicture.BackgroundImage = piecePicture;
                 newPicture.Size = new Size(30, 30);
@@ -236,17 +102,203 @@ namespace ChineseDarkChess {
             }
         }
 
-        private void updateBoard(int x, int y) {
-            if (x < 0 || x >= Rule.BOARD_WIDTH || y < 0 || y >= Rule.BOARD_HEIGHT) {
-                throw new Exception("x or y value is not valid.");
+        public Button getResetButton() {
+            return resetButton;
+        }
+
+        public void hidePlayInformation() {
+            for (int i = 0; i < Rule.BOARD_WIDTH && !(pieceButtons is null); ++i) {
+                for (int j = 0; j < Rule.BOARD_HEIGHT; ++j) {
+                    if (pieceButtons[i, j] is null) {
+                        continue;
+                    }
+                    pieceButtons[i, j].Hide();
+                }
+            }
+            if (!(redPiecesTakenPictures is null)) {
+                foreach (PictureBox pictureBox in redPiecesTakenPictures) {
+                    pictureBox.Hide();
+                }
             }
 
-            pieceButtons[x, y].BackgroundImage = getPieceImage(darkChessModel.getBoard()[x, y]);
+            if (!(blackPiecesTakenPictures is null)) {
+                foreach (PictureBox pictureBox in blackPiecesTakenPictures) {
+                    pictureBox.Hide();
+                }
+            
+            }
+
+            if (!(background is null)) {
+                background.Hide();
+            }
+
+            if (!(player1ColorLabel is null)) {
+                player1ColorLabel.Hide();
+            }
+
+            if (!(player2ColorLabel is null)) {
+                player2ColorLabel.Hide();
+            }
+
+            if (!(player1Picture is null)) {
+                player1Picture.Hide();
+            }
+
+            if (!(player2Picture is null)) {
+                player2Picture.Hide();
+            }
+
+            if (!(resetButton is null)) {
+                resetButton.Hide();
+            }
+        }
+
+        public void showPlayInformation() {
+            for (int i = 0; i < Rule.BOARD_WIDTH && !(pieceButtons is null); ++i) {
+                for (int j = 0; j < Rule.BOARD_HEIGHT; ++j) {
+                    if (pieceButtons[i, j] is null) {
+                        continue;
+                    }
+                    pieceButtons[i, j].Show();
+                }
+            }
+            if (!(redPiecesTakenPictures is null)) {
+                foreach (PictureBox pictureBox in redPiecesTakenPictures) {
+                    pictureBox.Show();
+                }
+            }
+
+            if (!(blackPiecesTakenPictures is null)) {
+                foreach (PictureBox pictureBox in blackPiecesTakenPictures) {
+                    pictureBox.Show();
+                }
+
+            }
+
+            if (!(background is null)) {
+                background.Show();
+            }
+
+            if (!(player1ColorLabel is null)) {
+                player1ColorLabel.Show();
+            }
+
+            if (!(player2ColorLabel is null)) {
+                player2ColorLabel.Show();
+            }
+
+            if (!(player1Picture is null)) {
+                player1Picture.Show();
+            }
+
+            if (!(player2Picture is null)) {
+                player2Picture.Show();
+            }
+
+            if (!(resetButton is null)) {
+                resetButton.Show();
+            }
+        }
+
+        public Button getSelectedButton() {
+            return selectedButton;
+        }
+
+        public void setSelectedButton(Button selectedButton) {
+            this.selectedButton = selectedButton;
+        }
+
+        public Button getAttackButton() {
+            return attackButton;
+        }
+
+        public void setAttackButton(Button attackButton) {
+            this.attackButton = attackButton;
+        }
+
+        public Button[,] getPieceButtons() {
+            return pieceButtons;
+        }
+
+        public PictureBox getBackground() {
+            return background;
+        }
+
+        public PictureBox getPlayer1Picture() {
+            return player1Picture;
+        }
+
+        public PictureBox getPlayer2Picture() {
+            return player2Picture;
+        }
+
+        public void setPlayer1Picture(PictureBox player1Picture) {
+            this.player1Picture = player1Picture;
+        }
+
+        public void setPlayer2Picture(PictureBox player2Picture) {
+            this.player2Picture = player2Picture;
+        }
+
+        public Label getVictoryLabel() {
+            return victoryLabel;
+        }
+
+        public Label getPlayer1ColorLabel() {
+            return player1ColorLabel;
+        }
+
+        public Label getPlayer2ColorLabel() {
+            return player2ColorLabel;
+        }
+
+        public List<PictureBox> getRedPiecesTakenPictures() {
+            return redPiecesTakenPictures;
+        }
+
+        public List<PictureBox> getBlackPiecesTakenPictures() {
+            return blackPiecesTakenPictures;
+        }
+
+        public void setRedPiecesTakenPictures(List<PictureBox> redPiecesTakenPictures) {
+            this.redPiecesTakenPictures = redPiecesTakenPictures;
+        }
+
+        public void setBlackPiecesTakenPictures(List<PictureBox> blackPiecesTakenPictures) {
+            this.blackPiecesTakenPictures = blackPiecesTakenPictures;
+        }
+
+        public void showModeMenu() {
+            if (!(localPlayButton is null)) {
+                localPlayButton.Show();
+            }
+            if (!(multiplayerButton is null)) {
+                multiplayerButton.Show();
+            }
+        }
+
+        public void hideModeMenu() {
+            if (!(localPlayButton is null)) {
+                localPlayButton.Hide();
+            }
+            if (!(multiplayerButton is null)) {
+                multiplayerButton.Hide();
+            }
 
         }
 
-        private void resetButton_Click(object sender, EventArgs e) {
-            initButtons();
+        private void localPlayButton_Click(object sender, EventArgs e) {
+            hideModeMenu();
+            playMode = new SinglePlayerMode(this);
+            playMode.init();
+            showPlayInformation();
+        }
+
+        private void multiplayerButton_Click(object sender, EventArgs e) {
+            hideModeMenu();
+            playMode = new MultiPlayerMode(this);
+            playMode.init();
+            showPlayInformation();
         }
     }
 
