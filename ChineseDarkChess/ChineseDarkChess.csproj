@@ -33,10 +33,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MoveData">
+    <Reference Include="MoveData, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>.\MoveData.dll</HintPath>
     </Reference>
-    <Reference Include="packet">
+    <Reference Include="packet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>.\packet.dll</HintPath>
     </Reference>
     <Reference Include="System" />

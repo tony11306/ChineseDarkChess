@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Media;
 
 namespace ChineseDarkChess {
     public partial class Form1 : Form { // let Form1 be view
@@ -28,6 +29,8 @@ namespace ChineseDarkChess {
         private List<PictureBox> redPiecesTakenPictures = new List<PictureBox>();
         private List<PictureBox> blackPiecesTakenPictures = new List<PictureBox>();
 
+        private SoundPlayer pieceMoveSound = new SoundPlayer(@"sound\pieceMoveSound.wav");
+
         private PlayModeInterface playMode;
 
         public Form1() {
@@ -37,6 +40,9 @@ namespace ChineseDarkChess {
 
         }
 
+        public SoundPlayer getPieceMoveSound() {
+            return pieceMoveSound;
+        }
         public static Bitmap getPieceImage(int pieceID) {
             switch (pieceID) {
                 case (int)PieceEnum.BlackCannon:
@@ -156,6 +162,14 @@ namespace ChineseDarkChess {
                 leaveGameButton.Hide();
             }
 
+            if (!(victoryLabel is null)) {
+                victoryLabel.Hide();
+            }
+
+            if (!(surrenderButton is null)) {
+                surrenderButton.Hide();
+            }
+
         }
 
         public void showPlayInformation() {
@@ -207,6 +221,15 @@ namespace ChineseDarkChess {
             if (!(leaveGameButton is null)) {
                 leaveGameButton.Show();
             }
+
+            if (!(victoryLabel is null)) {
+                victoryLabel.Show();
+            }
+
+            if (!(surrenderButton is null)) {
+                surrenderButton.Hide();
+            }
+
         }
 
         public Button getSelectedButton() {
@@ -239,6 +262,10 @@ namespace ChineseDarkChess {
 
         public PictureBox getPlayer2Picture() {
             return player2Picture;
+        }
+
+        public void setPieceButtons(Button[,] pieceButtons) {
+            this.pieceButtons = pieceButtons;
         }
 
         public void setPlayer1Picture(PictureBox player1Picture) {
@@ -307,12 +334,48 @@ namespace ChineseDarkChess {
         }
 
         private void localPlayButton_Click(object sender, EventArgs e) {
-            hideModeMenu();
+            for (int i = 0; i < Rule.BOARD_WIDTH; ++i) {
+                for (int j = 0; j < Rule.BOARD_HEIGHT; ++j) {
+                    if (pieceButtons[i, j] is null) {
+                        continue;
+                    }
+                    pieceButtons[i, j].Dispose();
+                    Controls.Remove(pieceButtons[i, j]);
+                }
+            }
+            redPiecesTakenPictures = new List<PictureBox>();
+            blackPiecesTakenPictures = new List<PictureBox>();
+            selectedButton = null;
+            attackButton = null;
+            player1Picture.BackgroundImage = null;
+            player2Picture.BackgroundImage = null;
+            player1ColorLabel.BackColor = Color.Transparent;
+            player2ColorLabel.BackColor = Color.Transparent;
             playMode = new SinglePlayerMode(this);
+            victoryLabel.Text = "";
+            hideModeMenu();
             playMode.init();
         }
 
         private void multiplayerButton_Click(object sender, EventArgs e) {
+            for (int i = 0; i < Rule.BOARD_WIDTH; ++i) {
+                for (int j = 0; j < Rule.BOARD_HEIGHT; ++j) {
+                    if (pieceButtons[i, j] is null) {
+                        continue;
+                    }
+                    pieceButtons[i, j].Dispose();
+                    Controls.Remove(pieceButtons[i, j]);
+                }
+            }
+            redPiecesTakenPictures = new List<PictureBox>();
+            blackPiecesTakenPictures = new List<PictureBox>();
+            selectedButton = null;
+            attackButton = null;
+            player1Picture.BackgroundImage = null;
+            player2Picture.BackgroundImage = null;
+            player1ColorLabel.BackColor = Color.Transparent;
+            player2ColorLabel.BackColor = Color.Transparent;
+            victoryLabel.Text = "";
             hideModeMenu();
             showConnectConfirmMenu();
         }
@@ -334,6 +397,10 @@ namespace ChineseDarkChess {
             string serverAddress = ipTextBox.Text;
             playMode = new MultiPlayerMode(this, serverAddress);
             playMode.init();
+        }
+
+        public Button getSurrenderButton() {
+            return surrenderButton;
         }
     }
 

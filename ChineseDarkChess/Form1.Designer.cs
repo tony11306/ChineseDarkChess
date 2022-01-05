@@ -40,6 +40,7 @@ namespace ChineseDarkChess {
             this.ipTextLabel = new System.Windows.Forms.Label();
             this.gameIcon = new System.Windows.Forms.PictureBox();
             this.gameTitle = new System.Windows.Forms.Label();
+            this.surrenderButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.background)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1Picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player2Picture)).BeginInit();
@@ -209,12 +210,23 @@ namespace ChineseDarkChess {
             this.gameTitle.TabIndex = 15;
             this.gameTitle.Text = "暗棋";
             // 
+            // surrenderButton
+            // 
+            this.surrenderButton.Font = new System.Drawing.Font("新細明體", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.surrenderButton.Location = new System.Drawing.Point(521, 14);
+            this.surrenderButton.Name = "surrenderButton";
+            this.surrenderButton.Size = new System.Drawing.Size(146, 52);
+            this.surrenderButton.TabIndex = 16;
+            this.surrenderButton.Text = "投降";
+            this.surrenderButton.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(1182, 753);
+            this.Controls.Add(this.surrenderButton);
             this.Controls.Add(this.ipTextLabel);
             this.Controls.Add(this.connectConfirmButton);
             this.Controls.Add(this.ipTextBox);
@@ -259,6 +271,7 @@ namespace ChineseDarkChess {
         private System.Windows.Forms.Label ipTextLabel;
         private System.Windows.Forms.PictureBox gameIcon;
         private System.Windows.Forms.Label gameTitle;
+        private System.Windows.Forms.Button surrenderButton;
     }
 }
 

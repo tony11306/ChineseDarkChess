@@ -102,6 +102,7 @@ namespace ChineseDarkChess {
 
 
             if (hasMoved) {
+                view.getPieceMoveSound().Play();
                 isPlayer1Turn = !isPlayer1Turn;
                 if (isPlayer1Turn) {
                     view.getPlayer1ColorLabel().BackColor = Color.RosyBrown;
@@ -175,6 +176,7 @@ namespace ChineseDarkChess {
             }
 
             view.showPlayInformation();
+            view.getSurrenderButton().Hide();
 
 
         }

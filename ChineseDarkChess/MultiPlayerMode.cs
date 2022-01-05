@@ -22,6 +22,7 @@ namespace ChineseDarkChess {
         private static byte[] result = new byte[MAX_PACKET_BYTES];
         private Form1 view;
         private delegate void DelegateExecuteCommandBaseOnPacket(Packet pkt);
+        private delegate void DelegateHandleUnexpectedDisconnection();
         private int[,] board = null;
         private bool isPlayerTurn = false;
         private bool isPlayerBlack;
@@ -44,6 +45,12 @@ namespace ChineseDarkChess {
             }
         }
 
+        private void onSurrenderButtonClick(object sender, EventArgs e) {
+            Console.WriteLine(isPlayer1 ? "Player1 投降" : "Player2 投降");
+            Packet packet = new Packet(Command.SURRENDER, isPlayerBlack);
+            clientSocket.Send(Packet.Serialize(packet).Data);
+
+        }
         private bool isPlayerMoveInCorrectTurn(Pair<int, int> clickedButtonPair) {
             int[,] board = this.board;
             int x = clickedButtonPair.First;
@@ -77,6 +84,32 @@ namespace ChineseDarkChess {
             }
             view.hidePlayInformation();
             view.showModeMenu();
+        }
+
+        private void handleUnexpectedDisconnection() {
+            if (view.InvokeRequired) {
+                DelegateHandleUnexpectedDisconnection delegateHandleUnexpectedDisconnection = new DelegateHandleUnexpectedDisconnection(handleUnexpectedDisconnection);
+                view.Invoke(delegateHandleUnexpectedDisconnection);
+                return;
+            }
+            view.getSurrenderButton().Click -= onSurrenderButtonClick;
+            if (clientSocket.Connected) {
+                clientSocket.Shutdown(SocketShutdown.Both);
+                clientSocket.Close();
+                Console.WriteLine("與伺服器斷開連線");
+            }
+            view.showModeMenu();
+            if (!(view.getPieceButtons() is null)) {
+                foreach (Button button in view.getPieceButtons()) {
+                    if (button is null) {
+                        continue;
+                    }
+                    button.Dispose();
+                    view.Controls.Remove(button);
+                }
+            }
+            view.hidePlayInformation();
+
         }
 
         private void onPieceButtonClick(object sender, EventArgs e) {
@@ -251,6 +284,7 @@ namespace ChineseDarkChess {
                     }
 
                 } catch {
+                    handleUnexpectedDisconnection();
                     break;
                 }
             }
@@ -277,6 +311,8 @@ namespace ChineseDarkChess {
                     isPlayerTurn = isPlayer1;
                     initButtons();
                     isGameStart = true;
+                    view.getSurrenderButton().Click += onSurrenderButtonClick;
+                    view.getSurrenderButton().Show();
                     break;
                 case Command.COLOR_ASSIGN:
                     isPlayerBlack = packet.playerStatusChange;
@@ -289,8 +325,26 @@ namespace ChineseDarkChess {
                     switchTurn();
                     renderPiecesTaken(packet);
                     renderBoard();
+                    view.getPieceMoveSound().Play();
                     break;
                 case Command.MOVEFAIL:
+                    break;
+                case Command.GAME_RESULT:
+                    view.getSurrenderButton().Click -= onSurrenderButtonClick;
+                    if (isPlayerBlack) {
+                        if (packet.playerStatusChange) {
+                            view.getVictoryLabel().Text = "你(黑)贏了";
+                        } else {
+                            view.getVictoryLabel().Text = "你(黑)輸了";
+                        }
+                    } else {
+                        if (packet.playerStatusChange) {
+                            view.getVictoryLabel().Text = "你(紅)輸了";
+                        } else {
+                            view.getVictoryLabel().Text = "你(紅)贏了";
+                        }
+                    }
+                    isPlayerTurn = false;
                     break;
                 default:
                     break;
