@@ -13,15 +13,14 @@ using System.Drawing;
 
 namespace ChineseDarkChess {
     class MultiPlayerMode : PlayModeInterface {
-
-        public const string SERVER_ADDRESS = "127.0.0.1";
         public const int MAX_PACKET_BYTES = 2048;
         public const int PORT = 8885;
 
+        private string serverAddress = "";
         private Socket clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        private Thread recvThread;
         private static byte[] result = new byte[MAX_PACKET_BYTES];
         private Form1 view;
-        private bool isConnected = false;
         private delegate void DelegateExecuteCommandBaseOnPacket(Packet pkt);
         private int[,] board = null;
         private bool isPlayerTurn = false;
@@ -29,8 +28,20 @@ namespace ChineseDarkChess {
         private bool isPlayer1;
         private bool isGameStart = false;
 
-        public MultiPlayerMode(Form1 view) {
+        public MultiPlayerMode(Form1 view, string serverAddress) {
             this.view = view;
+            this.serverAddress = serverAddress;
+        }
+
+        ~MultiPlayerMode() {
+            try {
+                if (!(recvThread is null)) {
+                    recvThread.Abort();
+                }
+                view.getLeaveGameButton().Click -= onLeaveGameButtonClick;
+            } catch {
+                // error handling
+            }
         }
 
         private bool isPlayerMoveInCorrectTurn(Pair<int, int> clickedButtonPair) {
@@ -55,6 +66,17 @@ namespace ChineseDarkChess {
             }
 
             return board[x, y] < 0;
+        }
+
+        private void onLeaveGameButtonClick(object sender, EventArgs e) {
+            ((Button)sender).Click -= onLeaveGameButtonClick;
+            if (clientSocket.Connected) {
+                clientSocket.Shutdown(SocketShutdown.Both);
+                clientSocket.Close();
+                Console.WriteLine("與伺服器斷開連線");
+            }
+            view.hidePlayInformation();
+            view.showModeMenu();
         }
 
         private void onPieceButtonClick(object sender, EventArgs e) {
@@ -103,14 +125,17 @@ namespace ChineseDarkChess {
 
         }
         public void init() {
-            IPAddress ip = IPAddress.Parse(SERVER_ADDRESS);
             try {
+                IPAddress ip = IPAddress.Parse(serverAddress);
                 clientSocket.Connect(new IPEndPoint(ip, PORT));
-                Thread recvThread = new Thread(recv);
+                recvThread = new Thread(recv);
                 recvThread.IsBackground = true;
                 recvThread.Start();
-                isConnected = true;
                 Console.WriteLine("連接伺服器成功");
+                view.showPlayInformation();
+                view.getResetButton().Hide();
+                view.getLeaveGameButton().Click += onLeaveGameButtonClick;
+                
             } catch {
                 if (clientSocket.Connected) {
                     clientSocket.Shutdown(SocketShutdown.Both);
@@ -226,7 +251,7 @@ namespace ChineseDarkChess {
                     }
 
                 } catch {
-                    // error handling
+                    break;
                 }
             }
         }

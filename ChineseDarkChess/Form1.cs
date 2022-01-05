@@ -151,6 +151,11 @@ namespace ChineseDarkChess {
             if (!(resetButton is null)) {
                 resetButton.Hide();
             }
+
+            if (!(leaveGameButton is null)) {
+                leaveGameButton.Hide();
+            }
+
         }
 
         public void showPlayInformation() {
@@ -197,6 +202,10 @@ namespace ChineseDarkChess {
 
             if (!(resetButton is null)) {
                 resetButton.Show();
+            }
+
+            if (!(leaveGameButton is null)) {
+                leaveGameButton.Show();
             }
         }
 
@@ -268,6 +277,10 @@ namespace ChineseDarkChess {
             this.blackPiecesTakenPictures = blackPiecesTakenPictures;
         }
 
+        public Button getLeaveGameButton() {
+            return leaveGameButton;
+        }
+
         public void showModeMenu() {
             if (!(localPlayButton is null)) {
                 localPlayButton.Show();
@@ -275,6 +288,9 @@ namespace ChineseDarkChess {
             if (!(multiplayerButton is null)) {
                 multiplayerButton.Show();
             }
+
+            gameIcon.Show();
+            gameTitle.Show();
         }
 
         public void hideModeMenu() {
@@ -284,6 +300,9 @@ namespace ChineseDarkChess {
             if (!(multiplayerButton is null)) {
                 multiplayerButton.Hide();
             }
+
+            gameIcon.Hide();
+            gameTitle.Hide();
 
         }
 
@@ -295,7 +314,25 @@ namespace ChineseDarkChess {
 
         private void multiplayerButton_Click(object sender, EventArgs e) {
             hideModeMenu();
-            playMode = new MultiPlayerMode(this);
+            showConnectConfirmMenu();
+        }
+
+        private void showConnectConfirmMenu() {
+            ipTextLabel.Show();
+            ipTextBox.Show();
+            connectConfirmButton.Show();
+        }
+
+        private void hideConnectConfirmMenu() {
+            ipTextLabel.Hide();
+            ipTextBox.Hide();
+            connectConfirmButton.Hide();
+        }
+
+        private void connectConfirmButton_Click(object sender, EventArgs e) {
+            hideConnectConfirmMenu();
+            string serverAddress = ipTextBox.Text;
+            playMode = new MultiPlayerMode(this, serverAddress);
             playMode.init();
         }
     }

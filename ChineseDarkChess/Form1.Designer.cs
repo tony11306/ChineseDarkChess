@@ -34,9 +34,16 @@ namespace ChineseDarkChess {
             this.player2Picture = new System.Windows.Forms.PictureBox();
             this.localPlayButton = new System.Windows.Forms.Button();
             this.multiplayerButton = new System.Windows.Forms.Button();
+            this.leaveGameButton = new System.Windows.Forms.Button();
+            this.ipTextBox = new System.Windows.Forms.TextBox();
+            this.connectConfirmButton = new System.Windows.Forms.Button();
+            this.ipTextLabel = new System.Windows.Forms.Label();
+            this.gameIcon = new System.Windows.Forms.PictureBox();
+            this.gameTitle = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.background)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1Picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player2Picture)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gameIcon)).BeginInit();
             this.SuspendLayout();
             // 
             // background
@@ -117,24 +124,90 @@ namespace ChineseDarkChess {
             // localPlayButton
             // 
             this.localPlayButton.Font = new System.Drawing.Font("微軟正黑體", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.localPlayButton.Location = new System.Drawing.Point(502, 205);
+            this.localPlayButton.Location = new System.Drawing.Point(489, 275);
             this.localPlayButton.Name = "localPlayButton";
-            this.localPlayButton.Size = new System.Drawing.Size(199, 75);
+            this.localPlayButton.Size = new System.Drawing.Size(221, 75);
             this.localPlayButton.TabIndex = 8;
-            this.localPlayButton.Text = "Local mode";
+            this.localPlayButton.Text = "本地遊玩";
             this.localPlayButton.UseVisualStyleBackColor = true;
             this.localPlayButton.Click += new System.EventHandler(this.localPlayButton_Click);
             // 
             // multiplayerButton
             // 
             this.multiplayerButton.Font = new System.Drawing.Font("微軟正黑體", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.multiplayerButton.Location = new System.Drawing.Point(502, 448);
+            this.multiplayerButton.Location = new System.Drawing.Point(489, 513);
             this.multiplayerButton.Name = "multiplayerButton";
-            this.multiplayerButton.Size = new System.Drawing.Size(199, 75);
+            this.multiplayerButton.Size = new System.Drawing.Size(221, 75);
             this.multiplayerButton.TabIndex = 9;
-            this.multiplayerButton.Text = "Online mode";
+            this.multiplayerButton.Text = "連線模式";
             this.multiplayerButton.UseVisualStyleBackColor = true;
             this.multiplayerButton.Click += new System.EventHandler(this.multiplayerButton_Click);
+            // 
+            // leaveGameButton
+            // 
+            this.leaveGameButton.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.leaveGameButton.Location = new System.Drawing.Point(12, 12);
+            this.leaveGameButton.Name = "leaveGameButton";
+            this.leaveGameButton.Size = new System.Drawing.Size(106, 54);
+            this.leaveGameButton.TabIndex = 10;
+            this.leaveGameButton.Text = "返回目錄";
+            this.leaveGameButton.UseVisualStyleBackColor = true;
+            // 
+            // ipTextBox
+            // 
+            this.ipTextBox.Font = new System.Drawing.Font("新細明體", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.ipTextBox.Location = new System.Drawing.Point(382, 315);
+            this.ipTextBox.Name = "ipTextBox";
+            this.ipTextBox.Size = new System.Drawing.Size(429, 35);
+            this.ipTextBox.TabIndex = 11;
+            this.ipTextBox.Visible = false;
+            // 
+            // connectConfirmButton
+            // 
+            this.connectConfirmButton.Location = new System.Drawing.Point(521, 372);
+            this.connectConfirmButton.Name = "connectConfirmButton";
+            this.connectConfirmButton.Size = new System.Drawing.Size(148, 59);
+            this.connectConfirmButton.TabIndex = 12;
+            this.connectConfirmButton.Text = "連線至伺服器";
+            this.connectConfirmButton.UseVisualStyleBackColor = true;
+            this.connectConfirmButton.Visible = false;
+            this.connectConfirmButton.Click += new System.EventHandler(this.connectConfirmButton_Click);
+            // 
+            // ipTextLabel
+            // 
+            this.ipTextLabel.AutoSize = true;
+            this.ipTextLabel.BackColor = System.Drawing.Color.Transparent;
+            this.ipTextLabel.Font = new System.Drawing.Font("新細明體", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.ipTextLabel.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.ipTextLabel.Location = new System.Drawing.Point(506, 281);
+            this.ipTextLabel.Name = "ipTextLabel";
+            this.ipTextLabel.Size = new System.Drawing.Size(163, 24);
+            this.ipTextLabel.TabIndex = 13;
+            this.ipTextLabel.Text = "伺服器 IP 位址";
+            this.ipTextLabel.Visible = false;
+            // 
+            // gameIcon
+            // 
+            this.gameIcon.BackColor = System.Drawing.Color.Transparent;
+            this.gameIcon.BackgroundImage = global::ChineseDarkChess.Properties.Resources.redKing;
+            this.gameIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.gameIcon.Location = new System.Drawing.Point(416, 59);
+            this.gameIcon.Name = "gameIcon";
+            this.gameIcon.Size = new System.Drawing.Size(131, 123);
+            this.gameIcon.TabIndex = 14;
+            this.gameIcon.TabStop = false;
+            // 
+            // gameTitle
+            // 
+            this.gameTitle.AutoSize = true;
+            this.gameTitle.BackColor = System.Drawing.Color.Transparent;
+            this.gameTitle.Font = new System.Drawing.Font("新細明體", 28.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.gameTitle.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.gameTitle.Location = new System.Drawing.Point(578, 103);
+            this.gameTitle.Name = "gameTitle";
+            this.gameTitle.Size = new System.Drawing.Size(118, 48);
+            this.gameTitle.TabIndex = 15;
+            this.gameTitle.Text = "暗棋";
             // 
             // Form1
             // 
@@ -142,6 +215,10 @@ namespace ChineseDarkChess {
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(1182, 753);
+            this.Controls.Add(this.ipTextLabel);
+            this.Controls.Add(this.connectConfirmButton);
+            this.Controls.Add(this.ipTextBox);
+            this.Controls.Add(this.leaveGameButton);
             this.Controls.Add(this.multiplayerButton);
             this.Controls.Add(this.localPlayButton);
             this.Controls.Add(this.player2Picture);
@@ -151,6 +228,8 @@ namespace ChineseDarkChess {
             this.Controls.Add(this.victoryLabel);
             this.Controls.Add(this.player1ColorLabel);
             this.Controls.Add(this.background);
+            this.Controls.Add(this.gameIcon);
+            this.Controls.Add(this.gameTitle);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
@@ -158,6 +237,7 @@ namespace ChineseDarkChess {
             ((System.ComponentModel.ISupportInitialize)(this.background)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1Picture)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.player2Picture)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gameIcon)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -173,6 +253,12 @@ namespace ChineseDarkChess {
         private System.Windows.Forms.PictureBox player2Picture;
         private System.Windows.Forms.Button localPlayButton;
         private System.Windows.Forms.Button multiplayerButton;
+        private System.Windows.Forms.Button leaveGameButton;
+        private System.Windows.Forms.TextBox ipTextBox;
+        private System.Windows.Forms.Button connectConfirmButton;
+        private System.Windows.Forms.Label ipTextLabel;
+        private System.Windows.Forms.PictureBox gameIcon;
+        private System.Windows.Forms.Label gameTitle;
     }
 }
 

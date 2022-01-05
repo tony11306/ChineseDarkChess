@@ -17,9 +17,17 @@ namespace ChineseDarkChess {
         public SinglePlayerMode(Form1 view) {
             darkChessModel = new DarkChessModel();
             view.getResetButton().Click += onResetButtonClick;
+            view.getLeaveGameButton().Click += onLeaveGameButtonClick;
             this.view = view;
         }
 
+        private void onLeaveGameButtonClick(object sender, EventArgs e) {
+            ((Button)sender).Click -= onLeaveGameButtonClick;
+            view.getResetButton().Click -= onResetButtonClick;
+            Console.WriteLine("test");
+            view.hidePlayInformation();
+            view.showModeMenu();
+        }
         private bool isPlayerMoveInCorrectTurn(Pair<int, int> clickedButtonPair) {
             int[,] board = darkChessModel.getBoard();
             int x = clickedButtonPair.First;
@@ -116,6 +124,7 @@ namespace ChineseDarkChess {
             init();
         }
         public void init() {
+            Console.WriteLine("init");
             darkChessModel = new DarkChessModel();
             isGameStart = false;
             isPlayer1Turn = true;
@@ -135,9 +144,10 @@ namespace ChineseDarkChess {
                 view.Controls.Remove(pictureBox);
                 pictureBox.Dispose();
             }
-            Console.WriteLine("test");
             view.setRedPiecesTakenPictures(new List<PictureBox>());
             view.setBlackPiecesTakenPictures(new List<PictureBox>());
+            view.getPlayer1ColorLabel().BackColor = Color.RosyBrown;
+            view.getPlayer2ColorLabel().BackColor = Color.Transparent;
 
             for (int i = 0; i < Rule.BOARD_WIDTH; ++i) {
                 for (int j = 0; j < Rule.BOARD_HEIGHT; ++j) {
