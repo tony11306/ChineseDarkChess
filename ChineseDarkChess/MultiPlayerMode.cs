@@ -31,9 +31,6 @@ namespace ChineseDarkChess {
 
         public MultiPlayerMode(Form1 view) {
             this.view = view;
-            Thread recvThread = new Thread(recv);
-            recvThread.IsBackground = true;
-            recvThread.Start();
         }
 
         private bool isPlayerMoveInCorrectTurn(Pair<int, int> clickedButtonPair) {
@@ -109,13 +106,21 @@ namespace ChineseDarkChess {
             IPAddress ip = IPAddress.Parse(SERVER_ADDRESS);
             try {
                 clientSocket.Connect(new IPEndPoint(ip, PORT));
+                Thread recvThread = new Thread(recv);
+                recvThread.IsBackground = true;
+                recvThread.Start();
                 isConnected = true;
                 Console.WriteLine("連接伺服器成功");
             } catch {
-                isConnected = false;
-                clientSocket.Shutdown(SocketShutdown.Both);
-                clientSocket.Close();
-                Console.WriteLine("連接伺服器失敗");
+                if (clientSocket.Connected) {
+                    clientSocket.Shutdown(SocketShutdown.Both);
+                    clientSocket.Close();
+                    Console.WriteLine("與伺服器斷開連線");
+                } else {
+                    Console.WriteLine("連接伺服器失敗");
+                }
+                view.showModeMenu();
+                view.hidePlayInformation();
             }
         }
 

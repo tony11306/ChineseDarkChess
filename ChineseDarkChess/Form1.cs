@@ -291,14 +291,12 @@ namespace ChineseDarkChess {
             hideModeMenu();
             playMode = new SinglePlayerMode(this);
             playMode.init();
-            showPlayInformation();
         }
 
         private void multiplayerButton_Click(object sender, EventArgs e) {
             hideModeMenu();
             playMode = new MultiPlayerMode(this);
             playMode.init();
-            showPlayInformation();
         }
     }
 

@@ -164,6 +164,8 @@ namespace ChineseDarkChess {
                 }
             }
 
+            view.showPlayInformation();
+
 
         }
 
