@@ -129,7 +129,7 @@ namespace ChineseDarkChess {
             this.localPlayButton.Name = "localPlayButton";
             this.localPlayButton.Size = new System.Drawing.Size(221, 75);
             this.localPlayButton.TabIndex = 8;
-            this.localPlayButton.Text = "本地遊玩";
+            this.localPlayButton.Text = "單機對打";
             this.localPlayButton.UseVisualStyleBackColor = true;
             this.localPlayButton.Click += new System.EventHandler(this.localPlayButton_Click);
             // 
