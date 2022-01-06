@@ -108,6 +108,7 @@ namespace ChineseDarkChess {
                 }
             }
             view.hidePlayInformation();
+            view.getSurrenderButton().Click -= onSurrenderButtonClick;
 
         }
 
@@ -340,15 +341,15 @@ namespace ChineseDarkChess {
                     view.getSurrenderButton().Click -= onSurrenderButtonClick;
                     if (isPlayerBlack) {
                         if (packet.playerStatusChange) {
-                            view.getVictoryLabel().Text = "你(黑)贏了";
+                            view.getVictoryLabel().Text = "你贏了";
                         } else {
-                            view.getVictoryLabel().Text = "你(黑)輸了";
+                            view.getVictoryLabel().Text = "你輸了";
                         }
                     } else {
                         if (packet.playerStatusChange) {
-                            view.getVictoryLabel().Text = "你(紅)輸了";
+                            view.getVictoryLabel().Text = "你輸了";
                         } else {
-                            view.getVictoryLabel().Text = "你(紅)贏了";
+                            view.getVictoryLabel().Text = "你贏了";
                         }
                     }
                     isPlayerTurn = false;
