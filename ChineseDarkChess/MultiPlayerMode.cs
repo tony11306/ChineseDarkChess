@@ -46,7 +46,6 @@ namespace ChineseDarkChess {
         }
 
         private void onSurrenderButtonClick(object sender, EventArgs e) {
-            Console.WriteLine(isPlayer1 ? "Player1 投降" : "Player2 投降");
             Packet packet = new Packet(Command.SURRENDER, isPlayerBlack);
             clientSocket.Send(Packet.Serialize(packet).Data);
 
@@ -188,6 +187,14 @@ namespace ChineseDarkChess {
             view.setAttackButton(null);
             view.getPlayer1ColorLabel().BackColor = Color.RosyBrown;
             view.getPlayer2ColorLabel().BackColor = Color.Transparent;
+
+            if (isPlayer1) {
+                view.getPlayer1ColorLabel().Text = "你(玩家1)";
+                view.getPlayer2ColorLabel().Text = "對手(玩家2)";
+            } else {
+                view.getPlayer1ColorLabel().Text = "對手(玩家1)";
+                view.getPlayer2ColorLabel().Text = "你(玩家2)";
+            }
 
             foreach (PictureBox pictureBox in view.getRedPiecesTakenPictures()) {
                 view.Controls.Remove(pictureBox);

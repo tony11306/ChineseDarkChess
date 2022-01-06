@@ -24,7 +24,6 @@ namespace ChineseDarkChess {
         private void onLeaveGameButtonClick(object sender, EventArgs e) {
             ((Button)sender).Click -= onLeaveGameButtonClick;
             view.getResetButton().Click -= onResetButtonClick;
-            Console.WriteLine("test");
             view.hidePlayInformation();
             view.showModeMenu();
         }
@@ -125,7 +124,6 @@ namespace ChineseDarkChess {
             init();
         }
         public void init() {
-            Console.WriteLine("init");
             darkChessModel = new DarkChessModel();
             isGameStart = false;
             isPlayer1Turn = true;
@@ -134,6 +132,8 @@ namespace ChineseDarkChess {
             view.getPlayer1Picture().BackgroundImage = null;
             view.getPlayer2Picture().BackgroundImage = null;
             view.getVictoryLabel().Text = "";
+            view.getPlayer1ColorLabel().Text = "玩家1";
+            view.getPlayer2ColorLabel().Text = "玩家2";
             Button[,] pieceButtons = view.getPieceButtons();
 
             foreach (PictureBox pictureBox in view.getRedPiecesTakenPictures()) {
